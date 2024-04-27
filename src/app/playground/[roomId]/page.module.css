@@ -1,0 +1,163 @@
+.container{
+    width: 100vw;
+    height:100vh;
+    display: flex;
+    padding: 6%;
+    justify-content: start;
+    align-items: center;
+    background: url("../../../assets/148e627a192f66e42fffa4c6bdf4a777_prev_ui.png");
+    background-repeat: repeat;
+    background-size: 100px;
+    gap: 5%;
+    overflow: hidden;
+    position: relative;
+}
+.scoreBoard{
+    background-color: #FDFCEE;
+    width: 20%;
+    height: 90%;
+    min-width: 300px;
+    border: 2px solid black;
+    overflow: hidden;
+    overflow-y: auto;
+    display: flex;
+    /* justify-content: center; */
+    align-items: center;
+    flex-direction: column;
+}
+.scoreBoard p ,.utils p{
+    font-size: 25px;
+    font-weight: 600;
+    border-bottom: 2px solid black;
+    text-align: center;
+    padding: 20px;
+    width: 100%;
+}
+.canvasContainer{
+    border: 2px solid black;
+}
+.player{
+    padding: 10px;
+    font-size: 23px;
+    border-bottom: 2px solid black;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    justify-content: space-between;
+}
+.pink{
+    background-color: #FF90E8;
+}
+.yellow{
+    background-color: #FFC70F;
+}
+.utils{
+    width: 20%;
+    height: 90%;
+    border: 2px solid black;
+    background-color: #FDFCEE;
+    display: flex;
+    flex-direction: column;
+}
+.buttonContainer ,.BrushSize,.BrushColor{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+}
+.buttonContainer button{
+    padding: 10px;
+    border-radius: 40px;
+    border: 2px solid black;
+    background-color: #5fe99b;
+    width: 150px;
+    font-size: 16px;
+    font-weight: 600;
+}
+.buttonContainer button:nth-child(2){
+    background-color: #B43F44;
+    color: white;
+}
+.BrushSize{
+    justify-content: start;
+    gap: 20px;
+    font-size: 20px;
+    padding-inline: 15px;
+}
+.BrushSize button{
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: black;
+}
+.BrushSize button:nth-child(3){
+    width: 20px;
+    height: 20px;
+}
+.BrushSize button:nth-child(4){
+    width: 30px;
+    height: 30px;
+}
+.BrushSize button:nth-child(5){
+    width: 40px;
+    height: 40px;
+}
+.BrushSize button:nth-child(6){
+    width: 60px;
+    height: 60px;
+}
+.colorContainer{
+    display: flex;
+    justify-content: start;
+    gap: 10px;
+    align-items: center;
+    width: 100%;
+    font-size: 16px;
+    font-weight: 600;
+    position: relative;
+}
+.colorContainer input{
+  opacity: 0;
+  position: absolute;
+  top: 0;
+  right: 0;
+  cursor: pointer;
+}
+.colorContainer lable{
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    overflow: hidden;
+}
+.colorContainer img{
+    width: 30px;
+    height: 30px;
+    object-fit: cover;
+    cursor: pointer;
+}
+
+.colorContainer button{
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    background-color: #FF76CE;
+}
+.colorContainer button:nth-child(2){
+    background-color: #9195F6;
+}
+.colorContainer button:nth-child(3){
+    background-color: #F9D949;
+}
+.colorContainer button:nth-child(4){
+    background-color:#06FF00;
+}
+.container h1{
+    position: absolute;
+    top: 0;
+    right: 1%;
+    font-size: 8rem;
+    font-weight: 600;
+    text-align: center;
+    width: 100%;
+}
