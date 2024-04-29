@@ -1,0 +1,49 @@
+.scoreBoard{
+    background-color: white;
+    width: 20%;
+    height: 90%;
+    min-width: 300px;
+    border: 2px solid black;
+    overflow: hidden;
+    overflow-y: auto;
+    display: flex;
+    /* justify-content: center; */
+    align-items: center;
+    flex-direction: column;
+    border-radius: 5px;
+}
+.scoreBoard p ,.utils p{
+    font-size: 25px;
+    font-weight: 600;
+    border-bottom: 2px solid black;
+    text-align: center;
+    padding: 20px;
+    width: 100%;
+}
+.player{
+    padding: 10px;
+    font-size: 23px;
+    border-bottom: 2px solid black;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    justify-content: flex-start;
+    gap: 10px;
+}
+.pink{
+    background-color: #FF90E8;
+}
+.yellow{
+    background-color: #FFC70F;
+}
+.imgContainer{
+    background-color: white;
+    border: 1px solid black;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}

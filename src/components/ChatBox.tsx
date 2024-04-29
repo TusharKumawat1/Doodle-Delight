@@ -2,33 +2,46 @@
 import React, { useEffect, useRef, useState } from "react";
 import Styles from "../styles/chatBox.module.css";
 import { socket } from "@/app/socket";
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
+import { UserType } from "@/redux/user/userSlice";
 export default function ChatBox() {
   const chatBoxRef = useRef<HTMLDivElement | null>(null);
-  const [Messages, setMessages] = useState<string[]>([]);
+  const [Messages, setMessages] = useState<UserType[]>([]);
   const [content, setcontent] = useState("");
+  const User=useSelector((state:RootState)=>state.user)
   const sendMessage = () => {
-    socket.emit("sendMessage", content);
+    const payLoad={...User,content}
+    socket.emit("sendMessage", payLoad);
     setcontent("");
   };
   useEffect(() => {
-    socket.on("receiveMessage", (data: string) => {
+    socket.on("receiveMessage", (data) => {
       setMessages((p) => [...p, data]);
     });
   }, []);
   useEffect(() => {
     if (chatBoxRef.current) {
-      chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
+        setTimeout(() => {
+            chatBoxRef.current!.scrollTop = chatBoxRef.current!.scrollHeight;
+          }, 100);
     }
   }, [Messages]);
   return (
     <div className={Styles.container}>
       <div className={Styles.chats} ref={chatBoxRef}>
-        {Messages.length > 0 &&
-          Messages.map((data) => {
+        {Messages&& Messages.length > 0 &&
+          Messages.map((data,index) => {
             return (
-              <div className={Styles.message} key={data}>
+              <div className={Styles.message} key={index}>
                 {" "}
-                {data}
+                <div className={Styles.pfp}>
+                    <img src={data.avatar} alt={data.userId} width={30}/>
+                </div>
+                <div className={Styles.content} >
+                    <p className={Styles.username} >{data.username}</p>
+                    <p>{data.content}</p>
+                </div>
               </div>
             );
           })}

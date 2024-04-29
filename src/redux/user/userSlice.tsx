@@ -5,6 +5,7 @@ export type UserType={
     roomId:string;
     avatar:string;
     userId?:string;
+    content?:string;
 }
 const initialState:UserType={
     username:"",

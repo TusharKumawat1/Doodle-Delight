@@ -78,7 +78,6 @@ export default function JoinRoom() {
         userId:PayLoad.userId,
       })
     );
-    console.log(PayLoad)
     socket.emit("joinRoom", PayLoad);
     socket.on("users", (data) => {
       dispatch(addMemberToRoom(data));
@@ -106,8 +105,10 @@ export default function JoinRoom() {
         </div>
       </div>
       <form className={Styles.secondSection} onSubmit={GoToPlayground}>
-        <img src={Avatar.src} alt="Avatar" className={Styles.Avatar} />
-        <button className={Styles.avatarBtn} onClick={changeAvatar}>
+      <div className={Styles.imageContainer}>
+      <img src={Avatar.src} alt="Avatar" className={Styles.Avatar} />
+      </div>
+        <button type="button" className={Styles.avatarBtn} onClick={changeAvatar}>
           <i className="fa-solid fa-dice"></i>
         </button>
         <input

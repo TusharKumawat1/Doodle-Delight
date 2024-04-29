@@ -30,7 +30,7 @@ export default function Page() {
    <>
    <Hero/>
    <JoinRoom/>
-   <Footer/>
+   {/* <Footer/> */}
    </>
   );
 }
