@@ -4,14 +4,18 @@ import Styles from "./page.module.css";
 import CanvasDraw from "react-canvas-draw";
 import { ColorPicker } from "@/assets";
 import { socket } from "@/app/socket";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { useRouter } from "next/navigation";
+import { addMemberToRoom } from "@/redux/room/roomSlice";
+import { UserType } from "@/redux/user/userSlice";
 type BrushType = {
   color: string;
   radius: number;
 };
 export default function Page() {
+  const AllMembers = useSelector((state:RootState)=>state.room.allMembers)
+  const dispatch=useDispatch()
   const arr = ["Tushar", "Alok", "Amit", "Gulshan"];
   const [brush, setBrush] = useState<BrushType | undefined>();
   const CanvasRef = useRef<CanvasDraw>(null);
@@ -52,9 +56,10 @@ export default function Page() {
   };
 
   useEffect(() => {
-    if (socket.connected) {
-      socket.on("users", (data) => console.log(data));
-    }
+      socket.on("users", (data) =>{
+        dispatch(addMemberToRoom(data))
+      });
+    
     const userId=localStorage.getItem("userId")
     if (!userId) {
       router.push("/")
@@ -65,14 +70,14 @@ export default function Page() {
      })
   }, []);
   useEffect(()=>{
-    socket.on("userExit",data=>console.log(data))
+    socket.on("userExit",data=>  dispatch(addMemberToRoom(data)))
   },[])
   return (
     <div className={Styles.container}>
       <h1>Doodle Delight </h1>
       <div className={Styles.scoreBoard}>
         <p>Scoreboard</p>
-        {arr.map((user, index) => {
+        {AllMembers && AllMembers.map((user:UserType, index) => {
           return (
             <div
               key={index}
@@ -80,7 +85,7 @@ export default function Page() {
                 index % 2 === 0 ? Styles.pink : Styles.yellow
               }`}
             >
-              {user}
+             <div className={Styles.imgContainer}><img src={user.avatar} alt={`useravatar${user.userId}`} width={40}/></div> {user?.username}
             </div>
           );
         })}

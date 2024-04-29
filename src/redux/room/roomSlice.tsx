@@ -18,8 +18,8 @@ export const roomSlice=createSlice({
         setRoomId:(state,action:PayloadAction<string>)=>{
              state.roomId=action.payload
         },
-        addMemberToRoom:(state,action:PayloadAction<UserType>)=>{
-             state.allMembers.push(action.payload)
+        addMemberToRoom:(state,action:PayloadAction<UserType[]>)=>{
+             state.allMembers=action.payload
         }
     }
 })

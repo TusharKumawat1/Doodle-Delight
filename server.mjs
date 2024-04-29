@@ -14,7 +14,6 @@ app.prepare().then(() => {
   io.on("connection", (socket) => {
     console.log("new user joined");
     socket.on("joinRoom",PayLoad=>{
-      console.log("roomId : ",PayLoad.roomId)
       socket.join(PayLoad.roomId)
       const UserExists=AllUser.findIndex(user=>user.userId===PayLoad.userId)
       if (UserExists===-1) {
@@ -22,9 +21,9 @@ app.prepare().then(() => {
       }else{
         AllUser[UserExists]=PayLoad
       }
-      io.in(PayLoad.roomId).emit("users",AllUser.filter(data=>data.roomId===PayLoad.roomId))
+      io.to(PayLoad.roomId).emit("users",AllUser.filter(data=>data.roomId===PayLoad.roomId))
+      socket.emit("users", AllUser.filter((data) => data.roomId === PayLoad.roomId));
       socket.on("removeUser",(userId)=>{
-        console.log("userId to be removed : ",userId)
         const UserExists=AllUser.findIndex(user=>user.userId===userId)
         if (UserExists===-1) {
           console.log("No user found")

@@ -1,23 +1,27 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Styles from "@/styles/joinRoom.module.css";
 import { Asset1, Avatar1, Avatar2, Avatar3, Avatar4 } from "@/assets";
 import { useRouter } from "next/navigation";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { setUser } from "@/redux/user/userSlice";
 import { socket } from "@/app/socket";
+import { addMemberToRoom } from "@/redux/room/roomSlice";
 type PayLoadType = {
   username: string;
   roomId: string;
   userId: string;
+  avatar: string;
 };
 export default function JoinRoom() {
+  const User = useSelector((state: RootState) => state.user);
   const [Avatar, setAvatar] = useState(Avatar1);
   const [PayLoad, setPayLoad] = useState<PayLoadType>({
     username: "",
     roomId: "",
     userId: localStorage.getItem("userId") || "",
+    avatar: Avatar1.src,
   });
   const router = useRouter();
   const dispatch = useDispatch();
@@ -28,6 +32,9 @@ export default function JoinRoom() {
       index = Math.floor(Math.random() * avatarArr.length);
     }
     setAvatar(avatarArr[index]);
+    let obj=PayLoad
+    PayLoad.avatar=avatarArr[index].src
+    setPayLoad(obj)
   };
   function makeid(length: number) {
     let result = "";
@@ -56,23 +63,30 @@ export default function JoinRoom() {
   };
   const GoToPlayground = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (!PayLoad.userId) {
+      let userId = makeid(5);
+      localStorage.setItem("userId", userId);
+      let obj = PayLoad;
+      obj.userId = userId;
+      setPayLoad(obj);
+    }
     dispatch(
       setUser({
         username: PayLoad?.username!,
         roomId: PayLoad?.roomId!,
         avatar: Avatar.src!,
+        userId:PayLoad.userId,
       })
     );
-    if (!PayLoad.userId) {
-      let userId=makeid(5)
-      localStorage.setItem("userId",userId)
-      let obj = PayLoad;
-      obj.userId=userId
-      setPayLoad(obj)
-  }
+    console.log(PayLoad)
     socket.emit("joinRoom", PayLoad);
+    socket.on("users", (data) => {
+      dispatch(addMemberToRoom(data));
+    });
+
     router.push(`/playground/${PayLoad?.roomId}`);
   };
+
   return (
     <div id="join" className={Styles.container}>
       <div className={Styles.firstSection}>

@@ -4,6 +4,7 @@ export type UserType={
     username:string;
     roomId:string;
     avatar:string;
+    userId?:string;
 }
 const initialState:UserType={
     username:"",
@@ -18,6 +19,7 @@ export const userSlice=createSlice({
             state.username=action.payload.username
             state.roomId=action.payload.roomId
             state.avatar=action.payload.avatar
+            state.userId=action.payload.userId
        }
     }
 })
