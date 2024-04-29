@@ -9,6 +9,7 @@ import { RootState } from "@/redux/store";
 import { useRouter } from "next/navigation";
 import { addMemberToRoom } from "@/redux/room/roomSlice";
 import { UserType } from "@/redux/user/userSlice";
+import ChatBox from "@/components/ChatBox";
 type BrushType = {
   color: string;
   radius: number;
@@ -74,7 +75,7 @@ export default function Page() {
   },[])
   return (
     <div className={Styles.container}>
-      <h1>Doodle Delight </h1>
+      {/* <h1>Doodle Delight </h1> */}
       <div className={Styles.scoreBoard}>
         <p>Scoreboard</p>
         {AllMembers && AllMembers.map((user:UserType, index) => {
@@ -90,7 +91,7 @@ export default function Page() {
           );
         })}
       </div>
-      <div className={Styles.canvasContainer}>
+      {/* <div className={Styles.canvasContainer}>
         <CanvasDraw
           onChange={hc}
           ref={CanvasRef}
@@ -100,8 +101,8 @@ export default function Page() {
           brushColor={brush?.color}
           brushRadius={brush?.radius}
         />
-      </div>
-      <div className={Styles.utils}>
+      </div> */}
+      {/* <div className={Styles.utils}>
         <p>Tools</p>
         <div className={Styles.tools}>
           <div className={Styles.buttonContainer}>
@@ -145,9 +146,10 @@ export default function Page() {
                 onChange={handleChnage}
               />
             </span>
-          </div>
+          </div> 
         </div>
-      </div>
+      </div> */}
+          <ChatBox/>
     </div>
   );
 }

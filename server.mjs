@@ -32,6 +32,9 @@ app.prepare().then(() => {
         }
         io.in(PayLoad.roomId).emit("userExit",AllUser.filter(data=>data.roomId===PayLoad.roomId))
       })
+      socket.on("sendMessage",data=>{
+        io.in(PayLoad.roomId).emit("receiveMessage",data)
+      })
     })
   });
   
