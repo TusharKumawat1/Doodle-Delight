@@ -15,14 +15,18 @@ type PayLoadType = {
   avatar: string;
 };
 export default function JoinRoom() {
-  const User = useSelector((state: RootState) => state.user);
   const [Avatar, setAvatar] = useState(Avatar1);
   const [PayLoad, setPayLoad] = useState<PayLoadType>({
     username: "",
     roomId: "",
-    userId: localStorage.getItem("userId") || "",
+    userId: "",
     avatar: Avatar1.src,
   });
+  useEffect(()=>{
+    if (typeof window !== "undefined") {
+      setPayLoad(p=>({...p,userId:localStorage.getItem("userId") || ""}))
+     }
+  },[])
   const router = useRouter();
   const dispatch = useDispatch();
   const changeAvatar = () => {

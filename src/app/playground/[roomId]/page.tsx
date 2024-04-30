@@ -1,21 +1,15 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect } from "react";
 import Styles from "./page.module.css";
-import CanvasDraw from "react-canvas-draw";
-import { ColorPicker } from "@/assets";
 import { socket } from "@/app/socket";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@/redux/store";
+import { useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
 import { addMemberToRoom } from "@/redux/room/roomSlice";
-import { UserType } from "@/redux/user/userSlice";
-import ChatBox from "@/components/ChatBox";
-import ScoreBoard from "@/components/ScoreBoard";
-import Canvas from "@/components/Canvas";
-type BrushType = {
-  color: string;
-  radius: number;
-};
+import dynamic from "next/dynamic";
+const Canvas = dynamic(() => import("@/components/Canvas"), { ssr: false });
+const ChatBox = dynamic(() => import("@/components/ChatBox"), { ssr: false });
+const ScoreBoard = dynamic(() => import("@/components/ScoreBoard"), { ssr: false });
+let userId = "";
 export default function Page() {
   const dispatch = useDispatch();
   const router = useRouter();
@@ -24,20 +18,20 @@ export default function Page() {
       dispatch(addMemberToRoom(data));
     });
     if (typeof window !== "undefined") {
-      const userId = localStorage.getItem("userId");
-      if (!userId) {
-        router.push("/");
-      }
-
-      window.addEventListener("beforeunload", () => {
-        socket.emit("removeUser", userId);
-        localStorage.removeItem("userId");
-      });
+      userId = localStorage.getItem("userId")!;
     }
+    if (!userId) {
+      router.push("/");
+    }
+    window.addEventListener("beforeunload", () => {
+      socket.emit("removeUser", userId);
+      localStorage.removeItem("userId");
+    });
   }, []);
   useEffect(() => {
     socket.on("userExit", (data) => dispatch(addMemberToRoom(data)));
   }, []);
+
   return (
     <div className={Styles.container}>
       <div className={Styles.innerContainer}>

@@ -22,9 +22,11 @@ export default function ChatBox() {
   }, []);
   useEffect(() => {
     if (chatBoxRef.current) {
+      if (typeof window !== "undefined") {
         setTimeout(() => {
-            chatBoxRef.current!.scrollTop = chatBoxRef.current!.scrollHeight;
-          }, 100);
+          chatBoxRef.current!.scrollTop = chatBoxRef.current!.scrollHeight;
+        }, 100);
+      }
     }
   }, [Messages]);
   return (
