@@ -35,6 +35,9 @@ app.prepare().then(() => {
       socket.on("sendMessage",data=>{
         io.in(PayLoad.roomId).emit("receiveMessage",data)
       })
+      socket.on("draw",data=>{
+        io.to(PayLoad.roomId).emit("loadData",data)
+      })
     })
   });
   

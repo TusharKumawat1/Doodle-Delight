@@ -29,6 +29,9 @@ export default function ChatBox() {
   }, [Messages]);
   return (
     <div className={Styles.container}>
+      <h1>
+        Guess The Word
+      </h1>
       <div className={Styles.chats} ref={chatBoxRef}>
         {Messages&& Messages.length > 0 &&
           Messages.map((data,index) => {
@@ -50,7 +53,7 @@ export default function ChatBox() {
         {" "}
         <input
           type="text"
-          placeholder="type..."
+          placeholder="Type your guess here..."
           value={content}
           onChange={(e) => setcontent(e.target.value)}
           onKeyPress={(e) => {

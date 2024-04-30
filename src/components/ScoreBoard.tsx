@@ -13,10 +13,18 @@ export default function ScoreBoard() {
         <div
           key={index}
           className={`${Styles.player} ${
-            index % 2 === 0 ? Styles.pink : Styles.yellow
+            index % 2 === 0 ? Styles.black : Styles.yellow
           }`}
         >
-         <div className={Styles.imgContainer}><img src={user.avatar} alt={`useravatar${user.userId}`} width={40}/></div> {user?.username}
+         <div className={Styles.ranking}>
+         <span>#1</span>
+         <div className={Styles.imgContainer}><img src={user.avatar} alt={`useravatar${user.userId}`} width={40}/></div>
+         
+         </div>
+        <div className={Styles.userDetails}>
+        <span> {user?.username}</span>
+         <span>100</span>
+        </div>
         </div>
       );
     })}

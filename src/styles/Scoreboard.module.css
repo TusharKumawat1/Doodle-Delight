@@ -1,21 +1,21 @@
 .scoreBoard{
-    background-color: white;
     width: 20%;
     height: 90%;
     min-width: 300px;
-    border: 2px solid black;
     overflow: hidden;
     overflow-y: auto;
     display: flex;
-    /* justify-content: center; */
     align-items: center;
     flex-direction: column;
     border-radius: 5px;
+    border-top: 1px solid #d5d5d5;
+    border-right: 1px solid #d5d5d5;
+    /* z-index: 9; */
 }
-.scoreBoard p ,.utils p{
-    font-size: 25px;
+.scoreBoard p {
+    font-size: 20px;
     font-weight: 600;
-    border-bottom: 2px solid black;
+    border-bottom: 2px solid #d5d5d5;
     text-align: center;
     padding: 20px;
     width: 100%;
@@ -23,18 +23,26 @@
 .player{
     padding: 10px;
     font-size: 23px;
-    border-bottom: 2px solid black;
+    border-bottom: 1px solid #d5d5d5;
     display: flex;
     align-items: center;
     width: 100%;
-    justify-content: flex-start;
-    gap: 10px;
+    justify-content: start;
+    gap: 40px;
 }
-.pink{
-    background-color: #FF90E8;
+.black{
+    background-color: #000000;
+    color: white;
 }
 .yellow{
     background-color: #FFC70F;
+}
+.ranking{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    gap: 10px;
 }
 .imgContainer{
     background-color: white;
@@ -46,4 +54,16 @@
     justify-content: center;
     align-items: center;
     overflow: hidden;
+    font-size: 15px;
+}
+.player span{
+    font-size: 17px;
+    font-weight: 600;
+}
+.userDetails {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+    width: 100%;
 }

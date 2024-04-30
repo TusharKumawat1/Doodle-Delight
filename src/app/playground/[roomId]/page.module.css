@@ -2,151 +2,64 @@
     width: 100vw;
     height:100vh;
     display: flex;
-    padding: 6%;
-    justify-content: start;
-    align-items: center;
+    justify-content: center;
+    align-items: end;
     /* background: url("../../../assets/148e627a192f66e42fffa4c6bdf4a777_prev_ui.png"); */
     background-repeat: repeat;
     background-size: 100px;
     gap: 5%;
     overflow: hidden;
     position: relative;
+    background-color: #BEC5D7;
 }
-.scoreBoard{
+.innerContainer{
+    width: 95%;
+    height: 95%;
+    border-top-left-radius: 40px;
+    border-top-right-radius: 40px;
     background-color: white;
-    width: 20%;
-    height: 90%;
-    min-width: 300px;
-    border: 2px solid black;
-    overflow: hidden;
-    overflow-y: auto;
+    position: relative;
     display: flex;
-    /* justify-content: center; */
-    align-items: center;
-    flex-direction: column;
-    border-radius: 5px;
-}
-.scoreBoard p ,.utils p{
-    font-size: 25px;
-    font-weight: 600;
-    border-bottom: 2px solid black;
-    text-align: center;
-    padding: 20px;
-    width: 100%;
-}
-.canvasContainer{
-    border: 2px solid black;
-    border-radius: 10px;
-    overflow: hidden;
-}
-
-.utils{
-    width: 20%;
-    height: 90%;
-    border: 2px solid black;
-    background-color: #fff;
-    display: flex;
-    flex-direction: column;
-}
-.buttonContainer ,.BrushSize,.BrushColor{
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-}
-.buttonContainer button{
-    padding: 10px;
-    border-radius: 40px;
-    border: 2px solid black;
-    background-color: #5fe99b;
-    width: 150px;
-    font-size: 16px;
-    font-weight: 600;
-}
-.buttonContainer button:nth-child(2){
-    background-color: #B43F44;
-    color: white;
-}
-.BrushSize{
     justify-content: start;
-    gap: 20px;
-    font-size: 20px;
-    padding-inline: 15px;
+    align-items: end;
+    gap: 50px;
 }
-.BrushSize button{
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
+.box,.innerBox{
+    width: 80px;
+    height: 80px;
+    border-radius: 20px;
+    position: absolute;
+    top: 10px;
+    left: 20%;
     background-color: black;
 }
-.BrushSize button:nth-child(3){
-    width: 20px;
-    height: 20px;
-}
-.BrushSize button:nth-child(4){
-    width: 30px;
-    height: 30px;
-}
-.BrushSize button:nth-child(5){
-    width: 40px;
-    height: 40px;
-}
-.BrushSize button:nth-child(6){
-    width: 60px;
-    height: 60px;
-}
-.colorContainer{
-    display: flex;
-    justify-content: start;
-    gap: 10px;
-    align-items: center;
-    width: 100%;
-    font-size: 16px;
-    font-weight: 600;
-    position: relative;
-}
-.colorContainer input{
-  opacity: 0;
-  position: absolute;
-  top: 0;
-  right: 0;
-  cursor: pointer;
-}
-.colorContainer lable{
-    border-radius: 50%;
-    width: 30px;
-    height: 30px;
-    overflow: hidden;
-}
-.colorContainer img{
-    width: 30px;
-    height: 30px;
-    object-fit: cover;
-    cursor: pointer;
-}
 
-.colorContainer button{
-    border-radius: 50%;
-    width: 30px;
-    height: 30px;
-    background-color: #FF76CE;
+.innerBox{
+    background-color: #FE95DF;
+    top: -2px;
+    left: -2px;
 }
-.colorContainer button:nth-child(2){
-    background-color: #9195F6;
+.box:nth-child(1){
+    transform: rotate(-20deg);
 }
-.colorContainer button:nth-child(3){
-    background-color: #F9D949;
+.box:nth-child(2){
+    left: 40%;
+    transform: rotate(10deg);
 }
-.colorContainer button:nth-child(4){
-    background-color:#06FF00;
+.box:nth-child(3){
+    left: 60%;
+    transform: rotate(-10deg);
 }
-.container h1{
-    position: absolute;
-    top: 0;
-    right: 1%;
-    font-size: 8rem;
-    font-weight: 600;
-    text-align: center;
-    width: 100%;
+.box:nth-child(4){
+    left: 80%;
+    transform: rotate(20deg);
+}
+.box:nth-child(2) .innerBox{
+    background-color: #38D477;
+}
+.box:nth-child(3) .innerBox{
+    background-color: #2991EC;
+}
+.box:nth-child(4) .innerBox{
+    background-color: #FFC70F;
 }

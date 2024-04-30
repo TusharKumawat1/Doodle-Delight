@@ -17,47 +17,8 @@ type BrushType = {
   radius: number;
 };
 export default function Page() {
-  const AllMembers = useSelector((state: RootState) => state.room.allMembers);
   const dispatch = useDispatch();
-  const arr = ["Tushar", "Alok", "Amit", "Gulshan"];
-  const [brush, setBrush] = useState<BrushType | undefined>();
-  const CanvasRef = useRef<CanvasDraw>(null);
-  const roomId = useSelector((state: RootState) => state.room.roomId);
   const router = useRouter();
-  const handleChnage = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setBrush((p) => ({
-      ...p!,
-      color: e.target.value,
-    }));
-  };
-  const changeBrushSpecs = (radius?: number, color?: string) => {
-    if (radius) {
-      setBrush((p) => ({
-        ...p!,
-        radius: radius!,
-      }));
-    }
-    if (color) {
-      setBrush((p) => ({
-        ...p!,
-        color: color!,
-      }));
-    }
-  };
-  const Undo = () => {
-    if (CanvasRef.current) {
-      CanvasRef.current.undo();
-    }
-  };
-  const Clear = () => {
-    if (CanvasRef.current) {
-      CanvasRef.current.clear();
-    }
-  };
-  const hc = (data: CanvasDraw) => {
-    console.log(data);
-  };
-
   useEffect(() => {
     socket.on("users", (data) => {
       dispatch(addMemberToRoom(data));
@@ -77,9 +38,23 @@ export default function Page() {
   }, []);
   return (
     <div className={Styles.container}>
-      <ScoreBoard />
-      <Canvas />
-      <ChatBox />
+      <div className={Styles.innerContainer}>
+        <div className={Styles.box}>
+          <span className={Styles.innerBox}></span>
+        </div>
+        <div className={Styles.box}>
+          <span className={Styles.innerBox}></span>
+        </div>
+        <div className={Styles.box}>
+          <span className={Styles.innerBox}></span>
+        </div>
+        <div className={Styles.box}>
+          <span className={Styles.innerBox}></span>
+        </div>
+        <ScoreBoard />
+        <Canvas />
+        <ChatBox />
+      </div>
     </div>
   );
 }

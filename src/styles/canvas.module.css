@@ -1,144 +1,112 @@
-
 .canvasContainer{
-    border: 2px solid black;
+    width: 50%;
+    height: 70%;
+    margin-bottom: 5%;
     position: relative;
 }
-.player{
-    padding: 10px;
-    font-size: 23px;
-    border-bottom: 2px solid black;
-    display: flex;
-    align-items: center;
-    width: 100%;
-    justify-content: flex-start;
-    gap: 10px;
-}
-.pink{
-    background-color: #FF90E8;
-}
-.yellow{
-    background-color: #FFC70F;
-}
-.utils{
-    position: absolute;
-    width: 100%;
-    height: 20%;
-    border: 2px solid black;
-    background-color: #fff;
-    display: flex;
-    flex-direction: column;
-    bottom: -25%;
-}
-.buttonContainer ,.BrushSize,.BrushColor{
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-}
-.buttonContainer button{
-    padding: 10px;
-    border-radius: 40px;
-    border: 2px solid black;
-    background-color: #5fe99b;
-    width: 150px;
-    font-size: 16px;
-    font-weight: 600;
-}
-.buttonContainer button:nth-child(2){
-    background-color: #B43F44;
-    color: white;
-}
-.BrushSize{
-    justify-content: start;
-    gap: 20px;
-    font-size: 20px;
-    padding-inline: 15px;
-}
-.BrushSize button{
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background-color: black;
-}
-.BrushSize button:nth-child(3){
-    width: 20px;
-    height: 20px;
-}
-.BrushSize button:nth-child(4){
-    width: 30px;
-    height: 30px;
-}
-.BrushSize button:nth-child(5){
-    width: 40px;
-    height: 40px;
-}
-.BrushSize button:nth-child(6){
-    width: 60px;
-    height: 60px;
-}
-.colorContainer{
-    display: flex;
-    justify-content: start;
-    gap: 10px;
-    align-items: center;
-    width: 100%;
-    font-size: 16px;
-    font-weight: 600;
+.innerContainer{
+    border: 5px solid #d2d2d2;
     position: relative;
-}
-.colorContainer input{
-  opacity: 0;
-  position: absolute;
-  top: 0;
-  right: 0;
-  cursor: pointer;
-}
-.colorContainer lable{
-    border-radius: 50%;
-    width: 30px;
-    height: 30px;
-    overflow: hidden;
-}
-.colorContainer img{
-    width: 30px;
-    height: 30px;
-    object-fit: cover;
-    cursor: pointer;
-}
+    width: 100%;
+    height: 100%;
 
-.colorContainer button{
-    border-radius: 50%;
-    width: 30px;
-    height: 30px;
-    background-color: #FF76CE;
-}
-.colorContainer button:nth-child(2){
-    background-color: #9195F6;
-}
-.colorContainer button:nth-child(3){
-    background-color: #F9D949;
-}
-.colorContainer button:nth-child(4){
-    background-color:#06FF00;
-}
-.container h1{
-    position: absolute;
-    top: 0;
-    right: 1%;
-    font-size: 8rem;
-    font-weight: 600;
-    text-align: center;
-    width: 100%;
-}
-.imgContainer{
-    background-color: white;
-    border: 1px solid black;
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
+    overflow: hidden;
     display: flex;
     justify-content: center;
     align-items: center;
+    border-radius: 10px;
+}
+.tools{
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #000;
+    color :white;
+    border-radius: 50%;
+    cursor: pointer;
+    width: 50px;
+    height: 50px;
+}
+.toolsContainer{
+    width: 100%;
+    display: flex;
+    gap: 20px;
+    margin-top: 10px;
+    align-items: center;
+}
+.toolBox{
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 20px;
+    gap: 10px;
+    opacity: 0;
+    transition: .3s ease;
+}
+.color{
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: #0bc90b;
+    cursor: pointer;
+}
+.color:nth-child(2){
+    background-color: #FF76CE;
+}
+.color:nth-child(3){
+    background-color: #9195F6;
+}
+.color:nth-child(4){
+    background-color: #E21818;
+}
+.color:nth-child(5){
+    background-color: #F0DE36;
+}
+.toolBox label{
+    width: 30px;
+    height: 30px;
     overflow: hidden;
+    border-radius: 50%;
+    cursor: pointer;
+}
+.picker{
+    opacity: 0;
+}
+.radius,.btnContainer{
+    margin-left: -50px;
+    width: 150px;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    gap: 20px;
+    font-size: 20px;
+}
+.brush{
+    height: 3px;
+    width: 150px;
+    -webkit-appearance: none;
+    background-color: #000000;
+}
+.brush::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 15px;
+    height: 15px;
+    background-color: #000000;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+.btnContainer{
+    margin-left: 40px;
+}
+.btnContainer button{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 15px;
+    background-color: #000000;
+    padding: 10px;
+    border-radius: 20px;
+    color: white;
 }
