@@ -23,15 +23,17 @@ export default function Page() {
     socket.on("users", (data) => {
       dispatch(addMemberToRoom(data));
     });
+    if (typeof window !== "undefined") {
+      const userId = localStorage.getItem("userId");
+      if (!userId) {
+        router.push("/");
+      }
 
-    const userId = localStorage.getItem("userId");
-    if (!userId) {
-      router.push("/");
+      window.addEventListener("beforeunload", () => {
+        socket.emit("removeUser", userId);
+        localStorage.removeItem("userId");
+      });
     }
-    window.addEventListener("beforeunload", () => {
-      socket.emit("removeUser", userId);
-      localStorage.removeItem("userId");
-    });
   }, []);
   useEffect(() => {
     socket.on("userExit", (data) => dispatch(addMemberToRoom(data)));
