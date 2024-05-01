@@ -1,0 +1,9 @@
+{
+    "version": 2,
+    "builds": [{ "src": "server.mjs", "use": "@now/node-server" }],
+    "routes": [
+      { "src": "/socket.io/", "dest": "server.mjs" },
+      { "src": "/(.*)", "dest": "server.js" }
+    ]
+  }
+  
