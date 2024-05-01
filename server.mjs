@@ -11,12 +11,12 @@ app.prepare().then(() => {
   const httpServer = createServer(handler);
   const io = new Server(httpServer, {
     path:"/socket",
-    wsEngine:['ws','wss'],
+    wssEngine:['ws','wss'],
     cors: {
       origin: "*",
     },
     transports:['websocket','polling'],
-    allowEIO3:true;
+    allowEIO3:true
   });
   let AllUser = []; // todo
   io.on("connection", (socket) => {
