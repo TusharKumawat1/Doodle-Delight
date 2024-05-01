@@ -4,7 +4,7 @@ import { Server } from "socket.io";
 const dev = process.env.NODE_ENV !== "production";
 const hostname = "localhost";
 const port = 3000;
-const app = next({ dev, hostname, port });
+const app = next({ dev});
 const handler = app.getRequestHandler();
 
 try {
@@ -12,12 +12,9 @@ try {
     const httpServer = createServer(handler);
     const io = new Server(httpServer, {
       path: "/socket",
-      wssEngine: ["ws", "wss"],
       cors: {
         origin: "*",
       },
-      transports: ["websocket", "polling"],
-      allowEIO3: true,
     });
     let AllUser = []; // todo
     io.on("connection", (socket) => {
