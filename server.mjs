@@ -11,13 +11,13 @@ try {
   app.prepare().then(() => {
     const httpServer = createServer(handler);
     const io = new Server(httpServer, {
-      path:"/socket",
-      wssEngine:['ws','wss'],
+      path: "/socket",
+      wssEngine: ["ws", "wss"],
       cors: {
         origin: "*",
       },
-      transports:['websocket','polling'],
-      allowEIO3:true
+      transports: ["websocket", "polling"],
+      allowEIO3: true,
     });
     let AllUser = []; // todo
     io.on("connection", (socket) => {
@@ -41,7 +41,9 @@ try {
           AllUser.filter((data) => data.roomId === PayLoad.roomId)
         );
         socket.on("removeUser", (userId) => {
-          const UserExists = AllUser.findIndex((user) => user.userId === userId);
+          const UserExists = AllUser.findIndex(
+            (user) => user.userId === userId
+          );
           if (UserExists === -1) {
             console.log("No user found");
           } else {
@@ -60,7 +62,7 @@ try {
         });
       });
     });
-  
+
     httpServer
       .once("error", (err) => {
         console.log(err);
@@ -71,5 +73,5 @@ try {
       });
   });
 } catch (error) {
-  console.log(error)
+  console.log(error);
 }
