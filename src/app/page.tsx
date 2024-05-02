@@ -25,6 +25,7 @@ export default function Page() {
       socket.off("disconnect", onDisconnect);
     };
   },[])
+
   return (
    <>
    <Hero/>

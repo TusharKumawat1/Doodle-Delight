@@ -1,0 +1,23 @@
+.container{
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    z-index: 999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 50px;
+    font-size: 25px;
+    font-weight: bold;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+.word{
+    border: 3px solid white;
+    color: white;
+    padding: 20px;
+    transition: .2s ease;
+}
+.word:hover{
+    transform: scale(1.1,1.1);
+}

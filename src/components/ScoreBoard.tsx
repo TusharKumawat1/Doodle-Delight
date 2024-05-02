@@ -24,7 +24,7 @@ export default function ScoreBoard() {
          </div>
         <div className={Styles.userDetails}>
         <span> {user?.username}</span>
-         <span>100</span>
+         <span>0</span>
         </div>
         </div>
       );

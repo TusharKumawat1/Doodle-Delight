@@ -4,16 +4,24 @@ import CanvasDraw from "react-canvas-draw";
 import Styles from "../styles/canvas.module.css";
 import { ColorPicker } from "@/assets";
 import { socket } from "@/app/socket";
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
+import { toast } from "react-toastify";
 type BrushType = {
   color: string;
   radius: number;
 };
 export default function Canvas() {
+  const Allusers = useSelector((state: RootState) => state.room.allMembers);
+  const UserId = useSelector((state: RootState) => state.user.userId);
+  const [notAllowed, setnotAllowed] = useState(true);
+  const [admin, setAdmin] = useState(false);
   const [active, setactive] = useState(false);
   const [syncData, setSyncData] = useState("");
   const [brush, setBrush] = useState<BrushType | undefined>();
   const CanvasRef = useRef<CanvasDraw>(null);
   const toolBoxRef = useRef<HTMLDivElement | null>(null);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const handleColor = (e: React.ChangeEvent<HTMLInputElement>) => {
     setBrush((p) => ({
       ...p!,
@@ -43,24 +51,35 @@ export default function Canvas() {
     }
   };
   const handleChange = () => {
-    const interval = setInterval(() => {
-      if (CanvasRef.current) {
-        let data = CanvasRef.current.getSaveData();
-        socket.emit("draw", data);
+    if (CanvasRef.current) {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
       }
-      return () => clearInterval(interval);
-    }, 300);
+      timeoutRef.current = setTimeout(() => {
+        let data = CanvasRef.current!.getSaveData();
+        socket.emit("draw", data);
+      }, 300);
+    }
   };
   const toggleBox = () => {
     setactive((p) => !p);
   };
+  const startGame = () => {
+    if (Allusers.length <= 1) {
+      toast.warn("Need at least two players");
+    }
+    socket.emit("startRound",1)
+  };
+  useEffect(() => {
+    if (Allusers[0].userId === UserId) {
+      setAdmin((p) => true);
+    }
+  }, []);
   useEffect(() => {
     if (toolBoxRef.current) {
       if (active) {
-        toolBoxRef.current.style.width = `100%`;
         toolBoxRef.current.style.opacity = `1`;
       } else {
-        toolBoxRef.current.style.width = `0%`;
         toolBoxRef.current.style.opacity = `0`;
       }
     }
@@ -78,7 +97,7 @@ export default function Canvas() {
         }
       }
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   }, [syncData]);
   return (
@@ -92,8 +111,14 @@ export default function Canvas() {
           canvasHeight={1800}
           brushColor={brush?.color}
           brushRadius={brush?.radius}
+          disabled={notAllowed}
         />
       </div>
+      {admin && (
+        <button type="button" className={Styles.startBtn} onClick={startGame}>
+          Start
+        </button>
+      )}
       <div className={Styles.toolsContainer}>
         <button type="button" className={Styles.tools} onClick={toggleBox}>
           <i className="fa-solid fa-palette"></i>

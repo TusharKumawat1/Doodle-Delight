@@ -1,16 +1,21 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Styles from "./page.module.css";
 import { socket } from "@/app/socket";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
 import { addMemberToRoom } from "@/redux/room/roomSlice";
 import dynamic from "next/dynamic";
+import StartRound from "@/components/StartRound";
 const Canvas = dynamic(() => import("@/components/Canvas"), { ssr: false });
 const ChatBox = dynamic(() => import("@/components/ChatBox"), { ssr: false });
-const ScoreBoard = dynamic(() => import("@/components/ScoreBoard"), { ssr: false });
+const ScoreBoard = dynamic(() => import("@/components/ScoreBoard"), {
+  ssr: false,
+});
 let userId = "";
 export default function Page() {
+  const [ShowRound, setShowRound] = useState(false)
+  const [Round, setRound] = useState(0)
   const dispatch = useDispatch();
   const router = useRouter();
   useEffect(() => {
@@ -27,9 +32,18 @@ export default function Page() {
       socket.emit("removeUser", userId);
       localStorage.removeItem("userId");
     });
+    window.addEventListener("popstate", () => {
+      socket.emit("removeUser", userId);
+      localStorage.removeItem("userId");
+    });
   }, []);
   useEffect(() => {
     socket.on("userExit", (data) => dispatch(addMemberToRoom(data)));
+    socket.on("getRound",data=>{
+      setShowRound(p=>true)
+      setRound(p=>data)
+      setTimeout(()=>{setShowRound(false)},2000)
+    })
   }, []);
 
   return (
@@ -51,6 +65,9 @@ export default function Page() {
         <Canvas />
         <ChatBox />
       </div>
+        {
+          ShowRound&&<StartRound round={Round}/>
+        }
     </div>
   );
 }
