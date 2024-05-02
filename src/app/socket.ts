@@ -1,7 +1,7 @@
 import io from "socket.io-client"
 const URL = process.env.NODE_ENV === 'production'
-  ? 'wss://doodle-delight.vercel.app'
-  : 'ws://localhost:3000';
+  ? process.env.SERVER_URL!
+  : 'http://localhost:8080';
 export const socket = io(URL, {
     path:"/socket",
     transports: ["websocket","polling"],
