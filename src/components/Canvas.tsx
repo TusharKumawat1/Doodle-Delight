@@ -49,7 +49,7 @@ export default function Canvas() {
         socket.emit("draw", data);
       }
       return () => clearInterval(interval);
-    }, 100);
+    }, 300);
   };
   const toggleBox = () => {
     setactive((p) => !p);
