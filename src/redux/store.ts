@@ -1,10 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit'
 import userReducer from "./user/userSlice"
 import roomreducer from "./room/roomSlice"
+import utilityReducer from "./utils/utilitySlice"
 export const store = configureStore({
   reducer: {
     user:userReducer,
     room:roomreducer,
+    utility:utilityReducer
   },
 })
 

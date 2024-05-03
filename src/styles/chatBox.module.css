@@ -35,8 +35,8 @@
     width: 100%;
 }
 .pfp{
-    width: 40px;
-    height: 40px;
+    min-width: 40px;
+    min-height: 40px;
     border: 1px solid black;
     border-radius: 50%;
     display: flex;
@@ -67,4 +67,7 @@
     width: 100%;
     border: 1px solid black;
     height: 100%;
+}
+.msg{
+    font-weight: bold;  
 }

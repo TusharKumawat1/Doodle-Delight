@@ -29,6 +29,14 @@ export default function ChatBox() {
       }
     }
   }, [Messages]);
+  useEffect(()=>{
+    socket.on("currentlyGuessing", (data) => {
+      let obj=data;
+      obj.content=`${data.username} is guessing`
+      setMessages((p) => [...p, obj]);
+    });
+  }, []);
+
   return (
     <div className={Styles.container}>
       <h1>
@@ -45,7 +53,7 @@ export default function ChatBox() {
                 </div>
                 <div className={Styles.content} >
                     <p className={Styles.username} >{data.username}</p>
-                    <p>{data.content}</p>
+                    <p className={Styles.msg}>{data.content}</p>
                 </div>
               </div>
             );

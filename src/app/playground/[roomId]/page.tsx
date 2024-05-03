@@ -2,11 +2,17 @@
 import React, { useEffect, useState } from "react";
 import Styles from "./page.module.css";
 import { socket } from "@/app/socket";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 import { addMemberToRoom } from "@/redux/room/roomSlice";
 import dynamic from "next/dynamic";
 import StartRound from "@/components/StartRound";
+import WorsdOverlay from "@/components/WorsdOverlay";
+import { RootState } from "@/redux/store";
+import {
+  toggleShowRandomWords,
+  togglenotAllowedToDraw,
+} from "@/redux/utils/utilitySlice";
 const Canvas = dynamic(() => import("@/components/Canvas"), { ssr: false });
 const ChatBox = dynamic(() => import("@/components/ChatBox"), { ssr: false });
 const ScoreBoard = dynamic(() => import("@/components/ScoreBoard"), {
@@ -14,8 +20,13 @@ const ScoreBoard = dynamic(() => import("@/components/ScoreBoard"), {
 });
 let userId = "";
 export default function Page() {
-  const [ShowRound, setShowRound] = useState(false)
-  const [Round, setRound] = useState(0)
+  const [ShowRound, setShowRound] = useState(false);
+
+  const [Round, setRound] = useState(0);
+  const User = useSelector((state: RootState) => state.user);
+  const showRandomWords = useSelector(
+    (state: RootState) => state.utility.showRandomWords
+  );
   const dispatch = useDispatch();
   const router = useRouter();
   useEffect(() => {
@@ -39,11 +50,24 @@ export default function Page() {
   }, []);
   useEffect(() => {
     socket.on("userExit", (data) => dispatch(addMemberToRoom(data)));
-    socket.on("getRound",data=>{
-      setShowRound(p=>true)
-      setRound(p=>data)
-      setTimeout(()=>{setShowRound(false)},2000)
-    })
+    socket.on("getRound", (data) => {
+      setShowRound((p) => true);
+      setRound((p) => data);
+      setTimeout(() => {
+        setShowRound((p) => false);
+      }, 1000);
+    });
+  }, []);
+  useEffect(() => {
+    socket.on("currentlyGuessing", (data) => {
+      dispatch(togglenotAllowedToDraw(true));
+      if (User.userId === data.userId) {
+        setTimeout(() => dispatch(toggleShowRandomWords(true)), 1000);
+
+        dispatch(togglenotAllowedToDraw(false));
+        setTimeout(() => dispatch(toggleShowRandomWords(false)), 11000);
+      }
+    });
   }, []);
 
   return (
@@ -65,9 +89,8 @@ export default function Page() {
         <Canvas />
         <ChatBox />
       </div>
-        {
-          ShowRound&&<StartRound round={Round}/>
-        }
+      {ShowRound && <StartRound round={Round} />}
+      {showRandomWords && <WorsdOverlay />}
     </div>
   );
 }

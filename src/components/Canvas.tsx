@@ -4,17 +4,22 @@ import CanvasDraw from "react-canvas-draw";
 import Styles from "../styles/canvas.module.css";
 import { ColorPicker } from "@/assets";
 import { socket } from "@/app/socket";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { toast } from "react-toastify";
+import { togglenotAllowedToDraw } from "@/redux/utils/utilitySlice";
 type BrushType = {
   color: string;
   radius: number;
 };
+type wordType={
+  word:string;
+  active:boolean
+}
 export default function Canvas() {
   const Allusers = useSelector((state: RootState) => state.room.allMembers);
   const UserId = useSelector((state: RootState) => state.user.userId);
-  const [notAllowed, setnotAllowed] = useState(true);
+  const notAllowedToDraw=useSelector((state:RootState)=>state.utility.notAllowedToDraw)
   const [admin, setAdmin] = useState(false);
   const [active, setactive] = useState(false);
   const [syncData, setSyncData] = useState("");
@@ -22,6 +27,11 @@ export default function Canvas() {
   const CanvasRef = useRef<CanvasDraw>(null);
   const toolBoxRef = useRef<HTMLDivElement | null>(null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const [word, setword] = useState<wordType>({
+    word:"",
+    active:false
+  })
+  const dispatch=useDispatch();
   const handleColor = (e: React.ChangeEvent<HTMLInputElement>) => {
     setBrush((p) => ({
       ...p!,
@@ -64,11 +74,25 @@ export default function Canvas() {
   const toggleBox = () => {
     setactive((p) => !p);
   };
+  const UserTurn = async () => {
+    for (let player = 0; player < Allusers.length; player++) {
+      socket.emit("userWhoGuess", Allusers[player]);
+      await new Promise((resolve) => setTimeout(resolve, 20000));
+    }
+  };
+  const newRound = async () => {
+    for (let round = 1; round <= 3; round++) {
+      socket.emit("startRound", round);
+      await UserTurn();
+    }
+  };
   const startGame = () => {
     if (Allusers.length <= 1) {
       toast.warn("Need at least two players");
+    } else {
+      setAdmin((p) => false);
+      newRound();
     }
-    socket.emit("startRound",1)
   };
   useEffect(() => {
     if (Allusers[0].userId === UserId) {
@@ -100,8 +124,37 @@ export default function Canvas() {
       console.log(error);
     }
   }, [syncData]);
+  useEffect(()=>{//todo
+    let userID=""
+    socket.on("currentlyGuessing", (data) => {
+      userID=data.userId
+      Clear();
+    })
+    socket.on("guessTheWord",data=>{
+      console.log(data)
+      let emptySpace=Array.from(data).fill("_")
+      if (UserId===userID) {
+        setword(p=>({
+          ...p,
+          active:true,
+          word:data
+        }))
+      }else{
+        setword(p=>({
+          ...p,
+          active:true,
+          word:emptySpace.toString().replaceAll(","," ")
+        }))
+      }
+    })
+},[])
   return (
     <div className={Styles.canvasContainer}>
+      {
+        word.active &&  <div className={Styles.word}>{
+         <p>{word.word}</p> 
+        }</div>
+      }
       <div className={Styles.innerContainer}>
         <CanvasDraw
           onChange={handleChange}
@@ -111,7 +164,7 @@ export default function Canvas() {
           canvasHeight={1800}
           brushColor={brush?.color}
           brushRadius={brush?.radius}
-          disabled={notAllowed}
+          disabled={notAllowedToDraw}
         />
       </div>
       {admin && (
