@@ -1,4 +1,4 @@
-.container{
+.container {
     width: 30%;
     height: 90%;
     display: flex;
@@ -6,8 +6,12 @@
     justify-content: end;
     border-radius: 5px;
     border: 1px solid #d2d2d2;
+    min-width: 300px;
+    background-color: white;
+    /* z-index: 9; */
 }
-.container h1{
+
+.container h1 {
     width: 100%;
     padding: 10px;
     text-align: center;
@@ -15,7 +19,8 @@
     font-weight: bold;
     border-bottom: 1px solid #d2d2d2;
 }
-.chats{
+
+.chats {
     width: 100%;
     height: 90%;
     display: flex;
@@ -26,7 +31,8 @@
     justify-content: flex-end;
     padding-top: 1px;
 }
-.message{
+
+.message {
     padding: 10px;
     display: flex;
     align-items: center;
@@ -34,7 +40,8 @@
     gap: 5px;
     width: 100%;
 }
-.pfp{
+
+.pfp {
     min-width: 40px;
     min-height: 40px;
     border: 1px solid black;
@@ -44,17 +51,20 @@
     align-items: center;
     overflow: hidden;
 }
-.content{
+
+.content {
     display: flex;
     flex-direction: column;
     width: 100%;
     justify-content: center;
 }
-.username{
+
+.username {
     font-size: 12px;
     font-weight: bolder;
 }
-.inputContainer{
+
+.inputContainer {
     width: 100%;
     height: 10%;
     display: flex;
@@ -62,12 +72,39 @@
     align-items: center;
     gap: 5px;
 }
-.inputContainer input{
-    padding:10px;
+
+.inputContainer input {
+    padding: 10px;
     width: 100%;
     border: 1px solid black;
     height: 100%;
 }
-.msg{
-    font-weight: bold;  
+
+.msg {
+    font-weight: bold;
+}
+
+@media screen and (max-width: 1250px) {
+    .container {
+        min-width: 250px;
+        width: 300px;
+    }
+}
+
+@media screen and (max-width: 1200px) {
+    .container {
+        min-width: 250px;
+        width: 250px;
+    }
+}
+
+@media screen and (max-width: 1100px) {
+    .container {
+        position: absolute;
+        z-index: 999;
+        width: 50%;
+        bottom: 0;
+        height: 40%;
+        right: 0;
+    }
 }

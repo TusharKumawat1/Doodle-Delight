@@ -7,19 +7,28 @@ import { socket } from "@/app/socket";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { toast } from "react-toastify";
-import { togglenotAllowedToDraw } from "@/redux/utils/utilitySlice";
+import { setWord, togglenotAllowedToDraw, updateScore } from "@/redux/utils/utilitySlice";
 type BrushType = {
   color: string;
   radius: number;
 };
-type wordType={
-  word:string;
-  active:boolean
-}
+type wordType = {
+  word: string;
+  active: boolean;
+};
 export default function Canvas() {
   const Allusers = useSelector((state: RootState) => state.room.allMembers);
   const UserId = useSelector((state: RootState) => state.user.userId);
-  const notAllowedToDraw=useSelector((state:RootState)=>state.utility.notAllowedToDraw)
+  const rightGuess = useSelector(
+    (state: RootState) => state.utility.rightGuess
+  );
+  const wordTobeGuessed = useSelector(
+    (state: RootState) => state.utility.wordTobeGuessed
+  );
+  const notAllowedToDraw = useSelector(
+    (state: RootState) => state.utility.notAllowedToDraw
+  );
+  const [time, settime] = useState(80); //todo 80
   const [admin, setAdmin] = useState(false);
   const [active, setactive] = useState(false);
   const [syncData, setSyncData] = useState("");
@@ -28,10 +37,10 @@ export default function Canvas() {
   const toolBoxRef = useRef<HTMLDivElement | null>(null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const [word, setword] = useState<wordType>({
-    word:"",
-    active:false
-  })
-  const dispatch=useDispatch();
+    word: "",
+    active: false,
+  });
+  const dispatch = useDispatch();
   const handleColor = (e: React.ChangeEvent<HTMLInputElement>) => {
     setBrush((p) => ({
       ...p!,
@@ -77,7 +86,7 @@ export default function Canvas() {
   const UserTurn = async () => {
     for (let player = 0; player < Allusers.length; player++) {
       socket.emit("userWhoGuess", Allusers[player]);
-      await new Promise((resolve) => setTimeout(resolve, 20000));
+      await new Promise((resolve) => setTimeout(resolve, 80000));
     }
   };
   const newRound = async () => {
@@ -85,6 +94,7 @@ export default function Canvas() {
       socket.emit("startRound", round);
       await UserTurn();
     }
+    socket.emit("winner",Allusers[0])
   };
   const startGame = () => {
     if (Allusers.length <= 1) {
@@ -124,37 +134,73 @@ export default function Canvas() {
       console.log(error);
     }
   }, [syncData]);
-  useEffect(()=>{//todo
-    let userID=""
+  useEffect(() => {
+    //todo
+    let userID = "";
     socket.on("currentlyGuessing", (data) => {
-      userID=data.userId
+      userID = data.userId;
       Clear();
-    })
-    socket.on("guessTheWord",data=>{
-      console.log(data)
-      let emptySpace=Array.from(data).fill("_")
-      if (UserId===userID) {
-        setword(p=>({
+    });
+    socket.on("guessTheWord", (data) => {
+      settime(80); //todo
+      dispatch(setWord(data));
+      let emptySpace = Array.from(data).fill("_");
+      if (UserId === userID) {
+        setword((p) => ({
           ...p,
-          active:true,
-          word:data
-        }))
-      }else{
-        setword(p=>({
+          active: true,
+          word: data,
+        }));
+      } else {
+        setword((p) => ({
           ...p,
-          active:true,
-          word:emptySpace.toString().replaceAll(","," ")
-        }))
+          active: true,
+          word: emptySpace.toString().replaceAll(",", " "),
+        }));
       }
-    })
-},[])
+    });
+  }, []);
+  useEffect(() => {
+    if (rightGuess) {
+      setword((p) => ({
+        ...p,
+        active: true,
+        word: wordTobeGuessed!,
+      }));
+    }
+  }, [rightGuess]);
+  useEffect(() => {
+    //triggring time
+    const interverl = setInterval(() => {
+      settime((p) => p - 1);
+    }, 1000);
+    return () => {
+      clearInterval(interverl);
+    };
+  }, []);
+  useEffect(() => {
+    if (time === 0) {
+      setword((p) => ({ ...p, active: false }));
+      dispatch(updateScore(100))
+    }
+    if (time>=60 && time<=70 ) {
+      dispatch(updateScore(80))
+    }
+    else if (time>=50 && time<=70) {
+      dispatch(updateScore(50))
+    }
+    else if (time>0 && time<=50) {
+      dispatch(updateScore(30))
+    }
+  }, [time]);
   return (
     <div className={Styles.canvasContainer}>
-      {
-        word.active &&  <div className={Styles.word}>{
-         <p>{word.word}</p> 
-        }</div>
-      }
+      {word.active && <div className={Styles.word}>{<p>{word.word}</p>}</div>}
+      {word.active && (
+        <div className={Styles.time}>
+          <i className="fa-regular fa-clock"> </i> {time}
+        </div>
+      )}
       <div className={Styles.innerContainer}>
         <CanvasDraw
           onChange={handleChange}

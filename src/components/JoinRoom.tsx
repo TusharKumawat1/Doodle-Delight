@@ -13,6 +13,7 @@ type PayLoadType = {
   roomId: string;
   userId: string;
   avatar: string;
+  score:number
 };
 export default function JoinRoom() {
   const [Avatar, setAvatar] = useState(Avatar1);
@@ -21,6 +22,7 @@ export default function JoinRoom() {
     roomId: "",
     userId: "",
     avatar: Avatar1.src,
+    score:0
   });
   useEffect(()=>{
     if (typeof window !== "undefined") {

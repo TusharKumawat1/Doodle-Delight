@@ -5,7 +5,10 @@ type roomType={
     roomId:string;
     allMembers:UserType[]
 }
-
+type updateScore={
+    allMembers:UserType[]
+    userIndex:number
+}
 const initialState:roomType={
     roomId:"",
     allMembers:[]

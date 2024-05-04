@@ -10,9 +10,11 @@ import StartRound from "@/components/StartRound";
 import WorsdOverlay from "@/components/WorsdOverlay";
 import { RootState } from "@/redux/store";
 import {
+  setRightGuess,
   toggleShowRandomWords,
   togglenotAllowedToDraw,
 } from "@/redux/utils/utilitySlice";
+import { toast } from "react-toastify";
 const Canvas = dynamic(() => import("@/components/Canvas"), { ssr: false });
 const ChatBox = dynamic(() => import("@/components/ChatBox"), { ssr: false });
 const ScoreBoard = dynamic(() => import("@/components/ScoreBoard"), {
@@ -61,6 +63,7 @@ export default function Page() {
   useEffect(() => {
     socket.on("currentlyGuessing", (data) => {
       dispatch(togglenotAllowedToDraw(true));
+      dispatch(setRightGuess(false))
       if (User.userId === data.userId) {
         setTimeout(() => dispatch(toggleShowRandomWords(true)), 1000);
 
@@ -69,7 +72,11 @@ export default function Page() {
       }
     });
   }, []);
-
+  useEffect(()=>{
+      socket.on("winnerIs",data=>{
+        toast(`${data.username} is winner`)
+      })
+  },[])
   return (
     <div className={Styles.container}>
       <div className={Styles.innerContainer}>

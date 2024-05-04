@@ -9,7 +9,6 @@
     position: relative;
     width: 100%;
     height: 100%;
-
     overflow: hidden;
     display: flex;
     justify-content: center;
@@ -134,4 +133,107 @@
     z-index: 999;
     font-size: 30px;
     font-weight: bold;
+}
+.time{
+    font-size: 25px;
+    font-weight: bold;
+    position: absolute;
+    top: -7%;
+}
+@media screen and (max-width: 1600px) {
+    .canvasContainer{
+        height: 65%;
+        margin-bottom: 10%;
+    }
+}
+@media screen and (max-width: 1500px) {
+    .toolsContainer{
+       width: 87%;
+       gap: 10px;
+    }
+    .canvasContainer{
+        width: 45%;
+        height: 65%;
+        margin-bottom: 10%;
+    }
+    .toolBox{
+        padding: 20px 0px;
+        gap: 10px;
+    }
+    .color{
+        min-width: 25px;
+        min-height: 25px;
+    }
+    .toolBox label{
+        min-width: 25px;
+        min-height: 25px;
+    }
+    .radius{
+        margin-left: -50px;
+        width: 100px;
+    }
+    .brush{
+        width: 100px;
+    }
+}
+@media screen and (max-width: 1400px) {
+    .toolsContainer{
+       width: 90%;
+    }
+    .canvasContainer{
+       
+        height: 60%;
+        margin-bottom: 10%;
+    }
+    .btnContainer button{
+        font-size: 14px;
+    }
+}
+@media screen and (max-width: 1300px) {
+    .canvasContainer{
+        height: 50%;
+        margin-bottom: 15%;
+    }
+}
+@media screen and (max-width: 1200px) {
+    .color{
+        min-width: 22px;
+        min-height: 22px;
+    }
+    .radius{
+        margin-left: -10px;
+    }
+    .canvasContainer{
+        width: 50%;
+        margin-bottom: 15%;
+    }
+}
+@media screen and (max-width: 1160px) {
+    .canvasContainer{
+        width: 50%;
+    }
+}
+@media screen and (max-width: 1100px) {
+    .canvasContainer{
+        position: absolute;
+        z-index: 999;
+        width: 80%;
+        top: 10px;
+    }
+    .toolsContainer{
+        margin-top: 0;
+    }
+    .word{
+        position: fixed;
+        top: 0%;
+        right: 47%;
+        z-index: 999;
+        font-size: 30px;
+        font-weight: bold;
+    }
+    .time{
+        position: fixed;
+        top: 0%;
+        font-size: 30px;
+    }
 }

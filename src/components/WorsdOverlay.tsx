@@ -18,25 +18,7 @@ export default function WorsdOverlay() {
   };
 
   useEffect(() => {
-    const timeOut = setTimeout(() => {
-      if (selectedWord.length === 0 && active) {
-        setActive((p) => true);
-        let index = Math.floor(Math.random() * words.length);
-        if (active) {
-          socket.emit("wordToBeGuessed", words[index]);
-        }
-        dispatch(toggleShowRandomWords(false));
-      }
-    }, 10000);
-    return () => {
-      if (active) {
-        setActive(false)
-        clearTimeout(timeOut);
-      }
-    };
-  }, []);
-
-  useEffect(() => {
+    //triggring time
     const interverl = setInterval(() => {
       settime((p) => p - 1);
     }, 1000);
@@ -44,6 +26,22 @@ export default function WorsdOverlay() {
       clearInterval(interverl);
     };
   }, []);
+
+  useEffect(() => {
+    //If user not select any word return random word
+    const timer = setTimeout(() => {
+      if (selectedWord.length === 0) {
+        setActive(true);
+        let index = Math.floor(Math.random() * words.length);
+        socket.emit("wordToBeGuessed", words[index]);
+        dispatch(toggleShowRandomWords(false));
+      }
+      console.log('This code runs after 10 seconds');
+    }, 9000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <div className={Styles.container}>
       <div className={Styles.time}>{time}</div>

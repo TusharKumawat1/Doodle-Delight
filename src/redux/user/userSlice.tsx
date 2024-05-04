@@ -6,11 +6,13 @@ export type UserType={
     avatar:string;
     userId?:string;
     content?:string;
+    score?:number
 }
 const initialState:UserType={
     username:"",
     roomId:"",
-    avatar:""
+    avatar:"",
+    score:0
 }
 export const userSlice=createSlice({
     name:"user",
