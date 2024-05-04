@@ -84,8 +84,9 @@ export default function Canvas() {
     setactive((p) => !p);
   };
   const UserTurn = async () => {
-    for (let player = 0; player < Allusers.length; player++) {
-      socket.emit("userWhoGuess", Allusers[player]);
+    const users=[...Allusers]
+    for (let player = 0; player < users.length; player++) {
+      socket.emit("userWhoGuess", users[player]);
       await new Promise((resolve) => setTimeout(resolve, 80000));
     }
   };
