@@ -7,7 +7,11 @@ import { socket } from "@/app/socket";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { toast } from "react-toastify";
-import { setWord, togglenotAllowedToDraw, updateScore } from "@/redux/utils/utilitySlice";
+import {
+  setAllowedToGuess,
+  setWord,
+  updateScore,
+} from "@/redux/utils/utilitySlice";
 type BrushType = {
   color: string;
   radius: number;
@@ -28,9 +32,10 @@ export default function Canvas() {
   const notAllowedToDraw = useSelector(
     (state: RootState) => state.utility.notAllowedToDraw
   );
-  const [time, settime] = useState(80); //todo 80
+  const [time, settime] = useState(60);
   const [admin, setAdmin] = useState(false);
   const [active, setactive] = useState(false);
+  const [done, setDone] = useState(false);
   const [syncData, setSyncData] = useState("");
   const [brush, setBrush] = useState<BrushType | undefined>();
   const CanvasRef = useRef<CanvasDraw>(null);
@@ -41,6 +46,7 @@ export default function Canvas() {
     active: false,
   });
   const dispatch = useDispatch();
+  //Brush adjustments
   const handleColor = (e: React.ChangeEvent<HTMLInputElement>) => {
     setBrush((p) => ({
       ...p!,
@@ -69,6 +75,8 @@ export default function Canvas() {
       CanvasRef.current.clear();
     }
   };
+
+  //Handling Canvas drawing and sharing to other users
   const handleChange = () => {
     if (CanvasRef.current) {
       if (timeoutRef.current) {
@@ -80,23 +88,31 @@ export default function Canvas() {
       }, 300);
     }
   };
+  //Toggling Adjustmet box for canvas
   const toggleBox = () => {
     setactive((p) => !p);
   };
+
+  //Game logic
+  const users = [...Allusers];
   const UserTurn = async () => {
-    const users=[...Allusers]
+    //Itrate every user for completing rounds
     for (let player = 0; player < users.length; player++) {
       socket.emit("userWhoGuess", users[player]);
-      await new Promise((resolve) => setTimeout(resolve, 80000));
+      await new Promise((resolve) => setTimeout(resolve, 70000));
     }
   };
   const newRound = async () => {
+    // 3 Rounds
     for (let round = 1; round <= 3; round++) {
       socket.emit("startRound", round);
       await UserTurn();
     }
-    socket.emit("winner",Allusers[0])
+    //  Indicating the Game is over
+    setDone(true);
   };
+
+  // Start The Game When Admin Click On Statr Button
   const startGame = () => {
     if (Allusers.length <= 1) {
       toast.warn("Need at least two players");
@@ -105,11 +121,19 @@ export default function Canvas() {
       newRound();
     }
   };
+  //Sending winner details to all user in a room
+  function winner() {
+    socket.emit("winner", Allusers[0]);
+  }
+
+  //Setting Admin
   useEffect(() => {
     if (Allusers[0].userId === UserId) {
       setAdmin((p) => true);
     }
   }, []);
+
+  //Handle toggle box logic
   useEffect(() => {
     if (toolBoxRef.current) {
       if (active) {
@@ -124,6 +148,8 @@ export default function Canvas() {
       setSyncData(data);
     });
   }, []);
+
+  // Syncing all users canvas
   useEffect(() => {
     try {
       if (CanvasRef.current) {
@@ -135,16 +161,23 @@ export default function Canvas() {
       console.log(error);
     }
   }, [syncData]);
+
+  // Word Gussing Logic
   useEffect(() => {
-    //todo
     let userID = "";
+    // Reseting all details when newuser is guessing
     socket.on("currentlyGuessing", (data) => {
       userID = data.userId;
       Clear();
+      dispatch(setAllowedToGuess(true));
     });
+
+    // Showing  Random words to select
     socket.on("guessTheWord", (data) => {
-      settime(80); //todo
+      settime(60);
       dispatch(setWord(data));
+      // If Current user guess the word the show is other wise hide it
+      //Only the person who select the word can see the word
       let emptySpace = Array.from(data).fill("_");
       if (UserId === userID) {
         setword((p) => ({
@@ -161,6 +194,8 @@ export default function Canvas() {
       }
     });
   }, []);
+
+  //If user guess the word correctly showing the word to it
   useEffect(() => {
     if (rightGuess) {
       setword((p) => ({
@@ -170,6 +205,8 @@ export default function Canvas() {
       }));
     }
   }, [rightGuess]);
+
+  //Decreasing time for a guess
   useEffect(() => {
     //triggring time
     const interverl = setInterval(() => {
@@ -179,21 +216,29 @@ export default function Canvas() {
       clearInterval(interverl);
     };
   }, []);
+
+  //Updating score based on time
   useEffect(() => {
     if (time === 0) {
       setword((p) => ({ ...p, active: false }));
-      dispatch(updateScore(100))
+      dispatch(updateScore(100));
     }
-    if (time>=60 && time<=70 ) {
-      dispatch(updateScore(80))
-    }
-    else if (time>=50 && time<=70) {
-      dispatch(updateScore(50))
-    }
-    else if (time>0 && time<=50) {
-      dispatch(updateScore(30))
+    if (time >= 50 && time <= 60) {
+      dispatch(updateScore(80));
+    } else if (time >= 40 && time <= 50) {
+      dispatch(updateScore(50));
+    } else if (time > 0 && time <= 30) {
+      dispatch(updateScore(30));
     }
   }, [time]);
+
+  //If game done shoing winner
+  useEffect(() => {
+    if (done) {
+      winner();
+    }
+  }, [done]);
+
   return (
     <div className={Styles.canvasContainer}>
       {word.active && <div className={Styles.word}>{<p>{word.word}</p>}</div>}

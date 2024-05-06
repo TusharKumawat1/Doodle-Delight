@@ -1,0 +1,22 @@
+.container{
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    z-index: 999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 50px;
+    font-size: 25px;
+    font-weight: bold;
+    background-color: rgba(0, 0, 0, 0.5);
+    transition: .3s ease;
+    flex-direction: column;
+}
+.container h1{
+    font-size: 5rem;
+    color: white;
+    position: absolute;
+    top: 30%;
+}

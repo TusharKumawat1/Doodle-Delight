@@ -14,7 +14,7 @@ import {
   toggleShowRandomWords,
   togglenotAllowedToDraw,
 } from "@/redux/utils/utilitySlice";
-import { toast } from "react-toastify";
+import Winner, { winnerType } from "@/components/Winner";
 const Canvas = dynamic(() => import("@/components/Canvas"), { ssr: false });
 const ChatBox = dynamic(() => import("@/components/ChatBox"), { ssr: false });
 const ScoreBoard = dynamic(() => import("@/components/ScoreBoard"), {
@@ -23,7 +23,7 @@ const ScoreBoard = dynamic(() => import("@/components/ScoreBoard"), {
 let userId = "";
 export default function Page() {
   const [ShowRound, setShowRound] = useState(false);
-
+  const [winner, setWinner] = useState<winnerType>();
   const [Round, setRound] = useState(0);
   const User = useSelector((state: RootState) => state.user);
   const showRandomWords = useSelector(
@@ -31,6 +31,7 @@ export default function Page() {
   );
   const dispatch = useDispatch();
   const router = useRouter();
+  //Adding users to room 
   useEffect(() => {
     socket.on("users", (data) => {
       dispatch(addMemberToRoom(data));
@@ -41,6 +42,7 @@ export default function Page() {
     if (!userId) {
       router.push("/");
     }
+    // If user leave of refresh the page removing user from room
     window.addEventListener("beforeunload", () => {
       socket.emit("removeUser", userId);
       localStorage.removeItem("userId");
@@ -50,8 +52,12 @@ export default function Page() {
       localStorage.removeItem("userId");
     });
   }, []);
+
   useEffect(() => {
+
+    // Geting users array after someone leave the room
     socket.on("userExit", (data) => dispatch(addMemberToRoom(data)));
+    //Starting the round
     socket.on("getRound", (data) => {
       setShowRound((p) => true);
       setRound((p) => data);
@@ -60,21 +66,25 @@ export default function Page() {
       }, 1000);
     });
   }, []);
+//Who is guessing the word
   useEffect(() => {
     socket.on("currentlyGuessing", (data) => {
       dispatch(togglenotAllowedToDraw(true));
       dispatch(setRightGuess(false))
       if (User.userId === data.userId) {
+        // Addtional 1 second for shoing current round
         setTimeout(() => dispatch(toggleShowRandomWords(true)), 1000);
 
         dispatch(togglenotAllowedToDraw(false));
+        //shoing random words of 10 seconds
         setTimeout(() => dispatch(toggleShowRandomWords(false)), 11000);
       }
     });
   }, []);
+  //seting winner details
   useEffect(()=>{
       socket.on("winnerIs",data=>{
-        toast(`${data.username} is winner`)
+        setWinner(p=>({pfp:data.avatar,username:data.username }))
       })
   },[])
   return (
@@ -98,6 +108,8 @@ export default function Page() {
       </div>
       {ShowRound && <StartRound round={Round} />}
       {showRandomWords && <WorsdOverlay />}
+      {winner &&  <Winner {...winner}/>}
+
     </div>
   );
 }

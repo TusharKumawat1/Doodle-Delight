@@ -5,14 +5,16 @@ type  PaylodaType={
     showRandomWords:boolean;
     wordTobeGuessed?:string;
     rightGuess?:boolean;
-    score?:number
+    score?:number;
+    allowedToGuess?:boolean;
 }
 const initialState:PaylodaType={
     notAllowedToDraw:true,
     showRandomWords:false,
     wordTobeGuessed:"",
     rightGuess:false,
-    score:100
+    score:100,
+    allowedToGuess:true
 }
 export const utilitySlice=createSlice({
     name:"utility",
@@ -29,7 +31,11 @@ export const utilitySlice=createSlice({
         updateScore:(state,action:PayloadAction<number>)=>{
             state.score=action.payload
         },
+        setAllowedToGuess:(state,action:PayloadAction<boolean>)=>{
+            state.allowedToGuess=action.payload
+        },
+        
     }
 })
-export const {togglenotAllowedToDraw,toggleShowRandomWords,setWord,setRightGuess,updateScore}=utilitySlice.actions
+export const {togglenotAllowedToDraw,toggleShowRandomWords,setWord,setRightGuess,updateScore,setAllowedToGuess}=utilitySlice.actions
 export default utilitySlice.reducer

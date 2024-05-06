@@ -3,7 +3,10 @@ import { fourRandomWords } from "@/utils/RandomWords";
 import React, { useEffect, useState } from "react";
 import Styles from "@/styles/wordsOverlay.module.css";
 import { useDispatch } from "react-redux";
-import { toggleShowRandomWords } from "@/redux/utils/utilitySlice";
+import {
+  setAllowedToGuess,
+  toggleShowRandomWords,
+} from "@/redux/utils/utilitySlice";
 import { socket } from "@/app/socket";
 export default function WorsdOverlay() {
   const [time, settime] = useState(10);
@@ -36,7 +39,7 @@ export default function WorsdOverlay() {
         socket.emit("wordToBeGuessed", words[index]);
         dispatch(toggleShowRandomWords(false));
       }
-      console.log('This code runs after 10 seconds');
+      console.log("This code runs after 10 seconds");
     }, 9000);
 
     return () => clearTimeout(timer);

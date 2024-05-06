@@ -31,6 +31,7 @@ export default function JoinRoom() {
   },[])
   const router = useRouter();
   const dispatch = useDispatch();
+  //canging avatars 
   const changeAvatar = () => {
     let avatarArr = [Avatar1, Avatar2, Avatar3, Avatar4];
     let index = Math.floor(Math.random() * avatarArr.length);
@@ -42,6 +43,7 @@ export default function JoinRoom() {
     PayLoad.avatar=avatarArr[index].src
     setPayLoad(obj)
   };
+  //generating random Id 
   function makeid(length: number) {
     let result = "";
     const characters =
@@ -60,6 +62,7 @@ export default function JoinRoom() {
       roomId: makeid(10),
     }));
   };
+
   const handleONchange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setPayLoad((p) => ({
@@ -67,6 +70,8 @@ export default function JoinRoom() {
       [name]: value,
     }));
   };
+
+  //Navigating user to playground 
   const GoToPlayground = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!PayLoad.userId) {
