@@ -134,7 +134,7 @@ export default function JoinRoom() {
         <input
           type="text"
           name="roomId"
-          placeholder="Romm ID"
+          placeholder="Room ID"
           className={Styles.roomId}
           value={PayLoad?.roomId}
           onChange={handleONchange}
