@@ -99,7 +99,7 @@ export default function Canvas() {
     //Itrate every user for completing rounds
     for (let player = 0; player < users.length; player++) {
       socket.emit("userWhoGuess", users[player]);
-      await new Promise((resolve) => setTimeout(resolve, 70000));
+      await new Promise((resolve) => setTimeout(resolve, 60000));
     }
   };
   const newRound = async () => {
@@ -144,7 +144,7 @@ export default function Canvas() {
     }
   }, [active]);
   useEffect(() => {
-    socket.on("loadData", (data) => {
+     socket.on("loadData", (data) => {
       setSyncData(data);
     });
   }, []);
